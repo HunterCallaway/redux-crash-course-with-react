@@ -7,9 +7,10 @@ class PostForm extends React.Component {
 		body: ''
 	};
 
-	//Bind this.
+	//Bind this to onChange and onSubmit.
 	//Note: this statement used to go inside of the constructor declaration.
 	onChange = this.onChange.bind(this);
+	onSubmit = this.onSubmit.bind(this);
 
 	onChange(e) {
 		//Set the state.
@@ -17,11 +18,36 @@ class PostForm extends React.Component {
 		this.setState({[e.target.name]: e.target.value})
 	}
 
+	onSubmit(e) {
+		//Prevent the default behavior.
+		e.preventDefault();
+
+		//Set the post variable equal to what will be submitted.
+		const post = {
+			title: this.state.title,
+			body: this.state.body
+		}
+
+		//Fetch the json object, declare the request method
+		fetch('https://jsonplaceholder.typicode.com/posts', {
+			method: 'POST',
+			//Specify the content-type.
+			headers: {
+				'content-type': 'application/json'
+			},
+			//Convert the data to strings.
+			body: JSON.stringify(post)
+		})
+		//Use the then() method to return JSON data and then console log the requested data.
+			.then(res => res.json())
+			.then(data => console.log(data))
+	}
+
 	render () {
 		return (
 			<div>
 				<h1>Add Post</h1>
-				<form>
+				<form onSubmit={this.onSubmit}>
 					<div>
 						<label>Title:</label><br />
 						<input
