@@ -23,6 +23,12 @@ class Posts extends React.Component {
 		this.props.fetchPosts();
 	}
 
+	UNSAFE_componentWillReceiveProps(nextProps) {
+		if(nextProps.newPost) {
+			this.props.posts.unshift(nextProps.newPost);
+		}
+	}
+
 	render () {
 		//Map over the posts and return JSX.
 		const postItems = this.props.posts.map(post => (
@@ -42,13 +48,15 @@ class Posts extends React.Component {
 
 Posts.propTypes = {
 	fetchPosts: PropTypes.func.isRequired,
-	posts: PropTypes.array.isRequired
+	posts: PropTypes.array.isRequired,
+	newPost: PropTypes.object
 };
 
 //Get the state from Redux and map it to properties of the component
 //for use inside of the component.
 const mapStateToProps = state => ({
-	posts: state.posts.items
+	posts: state.posts.items,
+	newPost: state.posts.item
 });
 
 export default connect(mapStateToProps, {fetchPosts})(Posts);

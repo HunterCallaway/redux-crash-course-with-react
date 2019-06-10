@@ -10,4 +10,23 @@ export const fetchPosts =() => dispatch => {
 				type: FETCH_POSTS,
 				payload: posts
 			}));
-}
+};
+
+export const createPost =(postData) => dispatch => {
+	//Fetch the json object, declare the request method
+	fetch('https://jsonplaceholder.typicode.com/posts', {
+		method: 'POST',
+		//Specify the content-type.
+		headers: {
+			'content-type': 'application/json'
+		},
+		//Convert the data to strings.
+		body: JSON.stringify(postData)
+	})
+	//Use the then() method to return JSON data and then dispatch the data to the reducer.
+		.then(res => res.json())
+		.then(post => dispatch({
+			type: NEW_POST,
+			payload: post
+		}));
+};
